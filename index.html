@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Smooth Animated Gradient</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+			}
+			canvas {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+
+			#controls {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				background-color: rgba(255, 255, 255, 0.5);
+				padding: 10px;
+				border-radius: 5px;
+			}
+
+			.slider-container {
+				margin-bottom: 5px;
+			}
+
+			label {
+				display: block;
+				margin-bottom: 2px;
+			}
+		</style>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+				font-family: "Poppins", sans-serif;
+				background-color: #f0f0f0;
+			}
+
+			canvas {
+				display: block;
+				width: 100%;
+				height: 100%;
+			}
+
+			#controls {
+				position: absolute;
+				top: 20px;
+				right: 20px;
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+				border: 2px solid #000; /* Neobrutalist border */
+			}
+
+			.slider-container {
+				margin-bottom: 15px;
+			}
+
+			label {
+				display: block;
+				margin-bottom: 5px;
+				font-weight: bold;
+				color: #333;
+			}
+
+			input[type="color"] {
+				width: 100%;
+				height: 30px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				margin-bottom: 5px;
+			}
+
+			input[type="range"] {
+				width: 100%;
+				height: 8px;
+				background: #000;
+				border-radius: 0;
+				outline: none;
+				opacity: 0.8;
+				transition: opacity 0.2s;
+				border: none; /* Neobrutalist border */
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+			}
+
+			input[type="range"]:hover {
+				opacity: 1;
+			}
+
+			input[type="range"]::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 20px;
+				height: 20px;
+				background: #fff;
+				border: 2px solid #000;
+				border-radius: 0;
+				cursor: pointer;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+				transition: background-color 0.2s ease-in-out;
+			}
+
+			input[type="range"]::-moz-range-thumb {
+				width: 20px;
+				height: 20px;
+				background: #fff;
+				border: 2px solid #000;
+				border-radius: 0;
+				cursor: pointer;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+				transition: background-color 0.2s ease-in-out;
+			}
+
+			input[type="range"]::-webkit-slider-thumb:hover {
+				background-color: #ddd;
+			}
+
+			input[type="range"]::-moz-range-thumb:hover {
+				background-color: #ddd;
+			}
+
+			#controls-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding-bottom: 10px;
+				border-bottom: 2px solid #000;
+				margin-bottom: 10px;
+			}
+
+			#collapse-icon {
+				font-size: 24px;
+				cursor: pointer;
+				user-select: none;
+			}
+
+			#controls-title {
+				margin: 0;
+				font-size: 20px;
+				font-weight: bold;
+				color: #333;
+			}
+
+			#controls.collapsed > *:not(#controls-header) {
+				display: none;
+			}
+
+			#controls {
+				transition: width 0.3s ease, height 0.3s ease;
+			}
+
+			#controls.collapsed {
+				width: 150px;
+				height: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="controls" class="collapsed">
+			<div id="controls-header">
+				<span id="collapse-icon">+</span>
+				<h2 id="controls-title">Controls</h2>
+			</div>
+
+			<div class="slider-container">
+				<label for="color1Base">Color 1 Base</label>
+				<input type="color" id="color1Base" value="#19334d" />
+			</div>
+
+			<script>
+				const uniformControls = document.getElementById("controls")
+				const collapseIcon = document.getElementById("collapse-icon")
+
+				collapseIcon.addEventListener("click", () => {
+					uniformControls.classList.toggle("collapsed")
+					if (uniformControls.classList.contains("collapsed")) {
+						collapseIcon.textContent = "+"
+					} else {
+						collapseIcon.textContent = "-"
+					}
+				})
+			</script>
+
+			<div class="slider-container">
+				<label for="color1Frequency">Color 1 Frequency</label>
+				<input
+					type="range"
+					id="color1Frequency"
+					min="0"
+					max="10"
+					step="0.1"
+					value="2.0"
+				/>
+			</div>
+
+			<div class="slider-container">
+				<label for="color1Amplitude">Color 1 Amplitude</label>
+				<input
+					type="range"
+					id="color1Amplitude"
+					min="0"
+					max="1"
+					step="0.01"
+					value="0.2"
+				/>
+			</div>
+
+			<div class="slider-container">
+				<label for="color2Base">Color 2 Base</label>
+				<input type="color" id="color2Base" value="#334026" />
+			</div>
+
+			<div class="slider-container">
+				<label for="color2Frequency">Color 2 Frequency</label>
+				<input
+					type="range"
+					id="color2Frequency"
+					min="0"
+					max="10"
+					step="0.1"
+					value="1.5"
+				/>
+			</div>
+
+			<div class="slider-container">
+				<label for="color2Amplitude">Color 2 Amplitude</label>
+				<input
+					type="range"
+					id="color2Amplitude"
+					min="0"
+					max="1"
+					step="0.01"
+					value="0.05"
+				/>
+			</div>
+
+			<div class="slider-container">
+				<label for="noiseFactor">Noise Factor</label>
+				<input
+					type="range"
+					id="noiseFactor"
+					min="0"
+					max="1"
+					step="0.01"
+					value="0.1"
+				/>
+			</div>
+
+			<div class="slider-container">
+				<label for="distanceFactor">Distance Factor</label>
+				<input
+					type="range"
+					id="distanceFactor"
+					min="0"
+					max="10"
+					step="0.1"
+					value="2.0"
+				/>
+			</div>
+		</div>
+		<canvas id="threeCanvas"></canvas>
+		<script src="index.js"></script>
+		<div id="footer">made with ❤️ by xar</div>
+		<div id="github-link">
+			<a href="https://example.com" target="_blank">
+				<img src="assets/github.png" alt="GitHub" width="32" height="32" />
+			</a>
+			<a href="https://ko-fi.com/xarbuildthings" target="_blank">
+				<img src="assets/ko-fi.gif" alt="Buy Me a Coffee" />
+			</a>
+		</div>
+		<style>
+			#footer {
+				position: absolute;
+				bottom: 10px;
+				right: 10px;
+				font-size: 12px;
+				color: white;
+			}
+
+			#github-link {
+				position: absolute;
+				bottom: 10px;
+				left: 10px;
+			}
+
+			#github-link img {
+				width: 24px;
+				height: 24px;
+			}
+		</style>
+	</body>
+</html>
