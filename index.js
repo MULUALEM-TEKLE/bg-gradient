@@ -27,7 +27,10 @@ Promise.all([
 	vertexShader = vertexShaderCode
 	fragmentShader = fragmentShaderCode
 
-	const planeGeometry = new THREE.PlaneGeometry(10, 10)
+	const planeGeometry = new THREE.PlaneGeometry(
+		window.innerWidth,
+		window.innerHeight
+	)
 	const planeMaterial = new THREE.ShaderMaterial({
 		vertexShader: vertexShader,
 		fragmentShader: fragmentShader,
